@@ -61,18 +61,28 @@ gdt_end:
 gdt_descriptor:
     dw gdt_end - gdt_start-1
     dd gdt_start
- 
-[BITS 32]
+
 load32:
-    mov ax, DATA_SEG
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
-    mov ebp, 0x00200000
-    mov esp, ebp
-    jmp $
+    mov eax, 1
+    mov ecx, 100
+    mov edi, 0x0100000
+    call ata_lba_read
+
+ata_lba_read:
+    mov ebx, eax
+    ; Send the highest 8 bits
+    shr eax, 24
+    mov dx, 0x1F6
+    out dx, al
+    ; Finished sending the highest bits
+
+    mov eax, ecx
+    mov dx, 0x1F2
+    out dx, al
+
+    mov eax, ebx
+    mov dx, 0x01F3
+    out dx, al
 
 ; Fill values with 0 to make 512 byte binary 
 ; $ -> Current address $$ -> Start address
