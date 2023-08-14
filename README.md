@@ -1,2 +1,2 @@
 # my-os-kernel
-Simple Multithreaded Operating System Kernel
+Simple Multithreaded Operating System Kernel - Udemy Course
